@@ -1,0 +1,43 @@
+name: Veille PSG
+
+on:
+  schedule:
+    - cron: "7 * * * *"     # toutes les heures (à hh:07, heure UTC)
+  workflow_dispatch:         # bouton "Run workflow" pour lancer à la main
+
+permissions:
+  contents: write            # pour enregistrer les nouvelles infos dans le dépôt
+
+concurrency:
+  group: veille-psg
+  cancel-in-progress: false
+
+jobs:
+  veille:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Installer les dépendances
+        run: pip install -r requirements.txt
+
+      - name: Collecter et générer la page
+        run: python main.py
+
+      - name: Enregistrer les nouvelles infos
+        run: |
+          git config user.name "veille-bot"
+          git config user.email "veille-bot@users.noreply.github.com"
+          git add data docs
+          if git diff --cached --quiet; then
+            echo "Rien de nouveau."
+          else
+            git commit -m "Veille PSG $(date -u +'%Y-%m-%d %H:%M') UTC"
+            git push
+          fi
