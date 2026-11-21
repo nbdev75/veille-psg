@@ -27,7 +27,9 @@ jobs:
       - name: Installer les dépendances
         run: pip install -r requirements.txt
 
-      - name: Collecter et générer la page
+      - name: Collecter, analyser (IA) et générer la page
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python main.py
 
       - name: Enregistrer les nouvelles infos

@@ -137,3 +137,10 @@ MAX_AGE_HOURS = 36
 DATA_PATH = "data/articles.json"   # base de données (simple fichier JSON)
 PAGE_PATH = "docs/index.html"      # page web générée
 KEEP_DAYS = 7                      # on garde 7 jours d'historique sur la page
+
+# --- IA (Claude Haiku) ------------------------------------------------------
+STORIES_PATH = "data/stories.json" # infos regroupées et résumées par l'IA
+AI_MODEL = "claude-haiku-5-5"
+AI_BATCH_SIZE = 60                 # titres envoyés par appel
+AI_MAX_BATCHES = 5                 # max d'appels par passage (sécurité coût)
+AI_CONTEXT_HOURS = 48              # infos récentes données à l'IA pour rattacher les suites
